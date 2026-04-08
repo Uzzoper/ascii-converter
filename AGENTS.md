@@ -22,7 +22,6 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Canvas API in browser for image processing
 - All conversion logic in `src/utils/`, components in `src/components/`
 - Path alias: `@/*` → `./src/*`
-- **ASCII luminance mapping is NOT inverted** — dark bg (#0a0a0a) + green text (#00ff41) means bright pixels → sparse chars (space) → black shows through → looks dark. Do NOT "fix" this.
 
 ## Conventions
 - Semantic commits: `feat:`, `chore:`, `fix:`

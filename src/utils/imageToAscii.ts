@@ -1,9 +1,15 @@
 export const CHAR_ASPECT_RATIO = 0.5;
 
-const CHARSET = "@#S%?*+;:,. ";
+export const CHARSETS: Record<string, string> = {
+  Classic: " .,:+=#S%?*@",
+  Blocks: " ░▒▓█",
+  Detailed: " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
+  Minimal: " .:+=#",
+};
 
 export interface AsciiOptions {
   maxWidth?: number;
+  charset?: string;
 }
 
 export async function imageToAscii(
@@ -11,12 +17,13 @@ export async function imageToAscii(
   options: AsciiOptions = {}
 ): Promise<string> {
   const maxWidth = options.maxWidth ?? 120;
+  const charset = options.charset ?? CHARSETS.Classic;
 
   const img = new Image();
-  img.src = imageSrc;
   await new Promise<void>((resolve, reject) => {
     img.onload = () => resolve();
     img.onerror = () => reject(new Error("Failed to load image"));
+    img.src = imageSrc;
   });
 
   const aspectRatio = img.height / img.width;
@@ -35,22 +42,40 @@ export async function imageToAscii(
   const imageData = ctx.getImageData(0, 0, width, height);
   const pixels = imageData.data;
 
+  let minLuma = 255;
+  let maxLuma = 0;
+  const pixelLumas = new Float32Array(width * height);
+
+  for (let i = 0; i < width * height; i++) {
+    const offset = i * 4;
+    const r = pixels[offset];
+    const g = pixels[offset + 1];
+    const b = pixels[offset + 2];
+
+    const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+    pixelLumas[i] = luma;
+
+    if (luma < minLuma) minLuma = luma;
+    if (luma > maxLuma) maxLuma = luma;
+  }
+
+  const lumaRange = maxLuma - minLuma;
+
   const lines: string[] = [];
 
   for (let y = 0; y < height; y++) {
     const lineChars: string[] = [];
     for (let x = 0; x < width; x++) {
-      const offset = (y * width + x) * 4;
-      const r = pixels[offset];
-      const g = pixels[offset + 1];
-      const b = pixels[offset + 2];
+      const idx = y * width + x;
+      const luma = pixelLumas[idx];
 
-      const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+      const normalized = lumaRange === 0 ? luma / 255 : (luma - minLuma) / lumaRange;
+
       const charIndex = Math.floor(
-        (luminance / 255) * (CHARSET.length - 1)
+        normalized * (charset.length - 1)
       );
 
-      lineChars.push(CHARSET[charIndex]);
+      lineChars.push(charset[charIndex]);
     }
     lines.push(lineChars.join(""));
   }

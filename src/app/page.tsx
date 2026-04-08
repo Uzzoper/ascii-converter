@@ -1,26 +1,35 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { Terminal, ScanLine, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import ImageUploader from "@/components/ImageUploader";
 import AsciiPreview from "@/components/AsciiPreview";
-import { imageToAscii } from "@/utils/imageToAscii";
+import ConversionControls from "@/components/ConversionControls";
+import { imageToAscii, CHARSETS } from "@/utils/imageToAscii";
+
+const DEBOUNCE_MS = 300;
 
 export default function Home() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [ascii, setAscii] = useState<string>("");
   const [converting, setConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [maxWidth, setMaxWidth] = useState(120);
+  const [charset, setCharset] = useState("Classic");
 
-  const handleImageReady = useCallback(async (dataUrl: string) => {
-    setImageSrc(dataUrl);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const convert = useCallback(async (src: string, width: number, cs: string) => {
     setConverting(true);
     setAscii("");
     setError(null);
 
     try {
-      const result = await imageToAscii(dataUrl);
+      const result = await imageToAscii(src, {
+        maxWidth: width,
+        charset: CHARSETS[cs],
+      });
       setAscii(result);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Conversion failed");
@@ -28,6 +37,25 @@ export default function Home() {
       setConverting(false);
     }
   }, []);
+
+  const handleImageReady = useCallback((dataUrl: string) => {
+    setImageSrc(dataUrl);
+    convert(dataUrl, maxWidth, charset);
+  }, [convert, maxWidth, charset]);
+
+  useEffect(() => {
+    if (!imageSrc) return;
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      convert(imageSrc, maxWidth, charset);
+    }, DEBOUNCE_MS);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [maxWidth, charset, imageSrc, convert]);
 
   const handleDownload = useCallback(() => {
     const blob = new Blob([ascii], { type: "text/plain" });
@@ -72,6 +100,12 @@ export default function Home() {
               >
                 Upload another image
               </button>
+              <ConversionControls
+                maxWidth={maxWidth}
+                charset={charset}
+                onMaxWidthChange={setMaxWidth}
+                onCharsetChange={setCharset}
+              />
             </>
           )}
         </div>
