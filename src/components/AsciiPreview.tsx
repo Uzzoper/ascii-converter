@@ -1,6 +1,6 @@
 "use client";
 
-import { Download } from "lucide-react";
+import ActionButtons from "./ActionButtons";
 
 interface Props {
   ascii: string;
@@ -16,15 +16,7 @@ export default function AsciiPreview({ ascii, onDownload }: Props) {
       >
         {ascii}
       </pre>
-      <div className="flex justify-end">
-        <button
-          onClick={onDownload}
-          className="flex items-center gap-2 px-4 py-2 border border-[#00ff41] rounded-lg text-[#00ff41] font-mono text-sm hover:bg-[#ffb000] hover:border-[#ffb000] hover:text-[#0a0a0a] transition-colors"
-        >
-          <Download className="w-4 h-4" />
-          Download .txt
-        </button>
-      </div>
+      <ActionButtons ascii={ascii} onDownload={onDownload} />
     </div>
   );
 }
