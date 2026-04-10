@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASCII Converter
+
+Web application that converts images to ASCII art.
+
+## Stack
+
+- Next.js 16.2.2 + React 19 + TypeScript
+- Tailwind CSS v4
+- lucide-react for icons
+- Canvas API for image processing
+
+## Features
+
+- Drag & drop or click to upload images
+- Real-time ASCII conversion with 4 charsets
+- Resolution control (20-200 chars width)
+- Copy to clipboard / Download as .txt
+- Dark hacker aesthetic (terminal style)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── layout.tsx    # Root layout
+│   ├── page.tsx      # Main page (conversion logic)
+│   └── globals.css  # Global styles (Tailwind)
+├── components/
+│   ├── ImageUploader.tsx      # Drag & drop image upload
+│   ├── AsciiPreview.tsx      # ASCII display
+│   ├── ConversionControls.tsx # Resolution & charset controls
+│   ├── ActionButtons.tsx     # Copy & download buttons
+│   └── CopyToast.tsx         # Copy feedback toast
+└── utils/
+    └── imageToAscii.ts       # Image to ASCII conversion logic
+```
 
-## Learn More
+## Charsets
 
-To learn more about Next.js, take a look at the following resources:
+| Name      | Characters                                    |
+|-----------|-----------------------------------------------|
+| Classic   | ` .,:+=#S%?*@`                               |
+| Blocks    | ` ░▒▓█`                                       |
+| Detailed  | Full ASCII range                              |
+| Minimal   | ` .:+=#`                                      |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev` - Start development server
+- `npm run build` - Production build
+- `npm run lint` - ESLint
+- `npm run test` - Run tests (vitest)
