@@ -69,7 +69,7 @@ export async function imageToAscii(
       const idx = y * width + x;
       const luma = pixelLumas[idx];
 
-      const normalized = lumaRange === 0 ? luma / 255 : (luma - minLuma) / lumaRange;
+      const normalized = lumaRange === 0 ? 0 : (luma - minLuma) / lumaRange;
 
       const charIndex = Math.floor(
         normalized * (charset.length - 1)
