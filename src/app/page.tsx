@@ -82,7 +82,7 @@ export default function Home() {
           <Terminal className="w-8 h-8 text-[#00ff41]" />
           <h1 className="text-2xl font-mono text-[#00ff41]">ASCII CONVERTER</h1>
         </div>
-        <p className="text-sm font-mono text-[#00ff41]">Convert images to ASCII art in your browser</p>
+        <p className="text-sm font-mono text-[#00ff41] text-center">Convert images to ASCII art in your browser</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl">
@@ -136,14 +136,33 @@ export default function Home() {
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 w-full h-[50vh] lg:h-[75vh] min-h-[400px] border-2 border-dashed border-[#00ff41]/30 rounded-lg">
               <ScanLine className="w-12 h-12 text-[#00ff41]/30" />
-              <p className="font-mono text-sm text-[#00ff41]/50">
+              <p className="font-mono text-sm text-[#00ff41]/50 text-center">
                 Upload an image to see ASCII art
               </p>
             </div>
           )}
         </div>
       </div>
-      <p className="text-xs font-mono text-[#00ff41]">It&apos;s free, it&apos;s safe, it&apos;s cool</p>
+      <p className="text-xs font-mono text-[#00ff41] text-center">It&apos;s free, it&apos;s safe, it&apos;s cool</p>
+
+      <footer className="flex flex-col items-center gap-1 mt-4 w-full">
+        <p className="text-xs font-mono text-[#00ff41] text-center">
+          Developed by{" "}
+          <span className="text-[#00ff41]">Juan Antonio Peruzzo</span>
+          {" • "}
+          <a
+            href="https://juanperuzzo.is-a.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#00ff41] hover:text-[#ffb000] underline-offset-2 hover:underline transition-colors"
+          >
+            juanperuzzo.is-a.dev
+          </a>
+        </p>
+        <p className="text-[10px] font-mono text-[#00ff41] text-center">
+          © 2026 ASCII Converter is a free &amp; open software
+        </p>
+      </footer>
     </div>
   );
 }

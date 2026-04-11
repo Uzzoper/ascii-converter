@@ -54,8 +54,8 @@ export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props
   }, [ascii]);
 
   return (
-    <div className="flex flex-col items-end gap-2">
-      <div className="flex gap-2">
+    <div className="flex flex-col items-center lg:items-end gap-2">
+      <div className="flex flex-wrap justify-center lg:justify-end gap-2">
         {copyError ? (
           <p className="text-red-500 text-sm font-mono">Browser not supported. Use Download instead.</p>
         ) : (
