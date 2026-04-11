@@ -84,7 +84,7 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl">
-        <div className="flex-1 flex flex-col items-center gap-4">
+        <div className="flex-1 min-w-0 flex flex-col items-center gap-4">
           {!imageSrc ? (
             <ImageUploader onImageReady={handleImageReady} />
           ) : (
@@ -113,7 +113,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className="flex-1 flex flex-col items-center gap-4">
+        <div className="flex-1 min-w-0 flex flex-col items-center gap-4">
           {converting ? (
             <p className="font-mono text-[#00ff41] animate-pulse">Converting...</p>
           ) : error ? (

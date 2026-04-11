@@ -58,7 +58,7 @@ export default function ImageUploader({ onImageReady }: Props) {
   }, [handleFile]);
 
   return (
-    <div className="flex flex-col w-full max-w-xl gap-4">
+    <div className="flex flex-col w-full gap-4">
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -66,7 +66,7 @@ export default function ImageUploader({ onImageReady }: Props) {
         onClick={handleClick}
         className={`
           flex flex-col items-center justify-center gap-4
-          h-64 lg:h-[60vh]
+          h-[50vh] lg:h-[75vh] min-h-[400px]
           border-2 border-dashed rounded-lg
           cursor-pointer transition-colors
           ${isDragging

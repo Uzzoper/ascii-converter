@@ -33,13 +33,13 @@ export default function ConversionControls({
 
       <div className="flex flex-col gap-2">
         <label className="font-mono text-sm text-[#00ff41]">Charset</label>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 lg:flex gap-2">
           {Object.keys(CHARSETS).map((name) => (
             <button
               key={name}
               onClick={() => onCharsetChange(name)}
               className={`
-                flex-1 px-3 py-1.5 border rounded font-mono text-xs transition-colors
+                lg:flex-1 px-3 py-1.5 border rounded font-mono text-xs transition-colors
                 ${charset === name
                   ? "border-[#00ff41] bg-[#00ff41]/20 text-[#00ff41]"
                   : "border-[#00ff41]/30 text-[#00ff41]/50 hover:border-[#ffb000] hover:text-[#ffb000]"
