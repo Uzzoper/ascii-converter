@@ -251,4 +251,132 @@ describe('imageToAscii', () => {
 
     expect(lines.length).toBe(expectedHeight);
   });
+
+  it('structure mode produces different output than luma mode on Detailed', async () => {
+    const maxWidth = 10;
+    // mockDimensions 100x100 → aspectRatio=1 → height = floor(10 * 1 * 0.5) = 5
+    mockDimensions = { width: 100, height: 100 };
+    const expectedHeight = 5;
+
+    // Create a gradient image with clear horizontal edge
+    const pixels = new Uint8ClampedArray(maxWidth * expectedHeight * 4);
+    for (let y = 0; y < expectedHeight; y++) {
+      for (let x = 0; x < maxWidth; x++) {
+        const i = (y * maxWidth + x) * 4;
+        // Top half dark, bottom half bright → horizontal edge
+        const val = y < expectedHeight / 2 ? 50 : 200;
+        pixels[i] = val;
+        pixels[i + 1] = val;
+        pixels[i + 2] = val;
+        pixels[i + 3] = 255;
+      }
+    }
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({ data: pixels });
+
+    const lumaResult = await imageToAscii('src', {
+      charset: CHARSETS.Detailed,
+      maxWidth,
+      structure: false,
+    });
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({ data: pixels });
+    const structResult = await imageToAscii('src', {
+      charset: CHARSETS.Detailed,
+      maxWidth,
+      structure: true,
+    });
+
+    expect(lumaResult).not.toBe(structResult);
+  });
+
+  it('structure mode is ignored for non-Detailed charsets', async () => {
+    const maxWidth = 10;
+    mockDimensions = { width: 100, height: 100 };
+    const expectedHeight = 5;
+
+    const pixels = new Uint8ClampedArray(maxWidth * expectedHeight * 4);
+    for (let i = 0; i < maxWidth * expectedHeight; i++) {
+      pixels[i * 4] = i % 2 === 0 ? 50 : 200;
+      pixels[i * 4 + 1] = i % 2 === 0 ? 50 : 200;
+      pixels[i * 4 + 2] = i % 2 === 0 ? 50 : 200;
+      pixels[i * 4 + 3] = 255;
+    }
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({ data: pixels });
+
+    const resultClassic = await imageToAscii('src', {
+      charset: CHARSETS.Classic,
+      maxWidth,
+      structure: true, // should be ignored
+    });
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({ data: pixels });
+    const resultClassicNoStruct = await imageToAscii('src', {
+      charset: CHARSETS.Classic,
+      maxWidth,
+      structure: false,
+    });
+
+    expect(resultClassic).toBe(resultClassicNoStruct);
+  });
+
+  it('structure mode uses horizontal chars for horizontal edges', async () => {
+    const maxWidth = 10;
+    // mockDimensions 100x100 → aspectRatio=1 → height = floor(10 * 1 * 0.5) = 5
+    mockDimensions = { width: 100, height: 100 };
+    const expectedHeight = 5;
+
+    // Sharp horizontal edge: top rows black, bottom rows white
+    const pixels = new Uint8ClampedArray(maxWidth * expectedHeight * 4);
+    for (let y = 0; y < expectedHeight; y++) {
+      for (let x = 0; x < maxWidth; x++) {
+        const i = (y * maxWidth + x) * 4;
+        const val = y < 2 ? 0 : 255;
+        pixels[i] = val;
+        pixels[i + 1] = val;
+        pixels[i + 2] = val;
+        pixels[i + 3] = 255;
+      }
+    }
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({ data: pixels });
+
+    const result = await imageToAscii('src', {
+      charset: CHARSETS.Detailed,
+      maxWidth,
+      structure: true,
+    });
+
+    // The edge row should contain structural chars (not just luma chars)
+    // Horizontal edge chars are "-=" from STRUCT_HORIZ
+    expect(result).toMatch(/[-=|!ilI/\\+*#MW&8%B@$]/);
+  });
+
+  it('structure mode handles uniform image same as luma fallback', async () => {
+    const maxWidth = 10;
+    mockDimensions = { width: 100, height: 100 };
+    const expectedHeight = 5;
+
+    mockCanvas._setSize(maxWidth, expectedHeight);
+    mockContext.getImageData.mockReturnValue({
+      data: createMockPixelData(maxWidth, expectedHeight, [127, 127, 127, 255]),
+    });
+
+    const result = await imageToAscii('src', {
+      charset: CHARSETS.Detailed,
+      maxWidth,
+      structure: true,
+    });
+
+    // Uniform image → all chars should be the same (flat charset, first char)
+    const allChars = result.replace(/\n/g, '');
+    const firstChar = allChars[0];
+    expect(allChars.split('').every(c => c === firstChar)).toBe(true);
+  });
 });

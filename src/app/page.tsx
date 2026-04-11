@@ -17,10 +17,11 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [maxWidth, setMaxWidth] = useState(120);
   const [charset, setCharset] = useState("Classic");
+  const [structure, setStructure] = useState(false);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const convert = useCallback(async (src: string, width: number, cs: string) => {
+  const convert = useCallback(async (src: string, width: number, cs: string, struct: boolean) => {
     setConverting(true);
     setAscii("");
     setError(null);
@@ -29,6 +30,7 @@ export default function Home() {
       const result = await imageToAscii(src, {
         maxWidth: width,
         charset: CHARSETS[cs],
+        structure: struct,
       });
       setAscii(result);
     } catch (err) {
@@ -40,8 +42,8 @@ export default function Home() {
 
   const handleImageReady = useCallback((dataUrl: string) => {
     setImageSrc(dataUrl);
-    convert(dataUrl, maxWidth, charset);
-  }, [convert, maxWidth, charset]);
+    convert(dataUrl, maxWidth, charset, structure);
+  }, [convert, maxWidth, charset, structure]);
 
   useEffect(() => {
     if (!imageSrc) return;
@@ -49,13 +51,13 @@ export default function Home() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     debounceRef.current = setTimeout(() => {
-      convert(imageSrc, maxWidth, charset);
+      convert(imageSrc, maxWidth, charset, structure);
     }, DEBOUNCE_MS);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [maxWidth, charset, imageSrc, convert]);
+  }, [maxWidth, charset, imageSrc, structure, convert]);
 
   const handleDownload = useCallback(() => {
     const blob = new Blob([ascii], { type: "text/plain" });
@@ -106,8 +108,10 @@ export default function Home() {
               <ConversionControls
                 maxWidth={maxWidth}
                 charset={charset}
+                structure={structure}
                 onMaxWidthChange={setMaxWidth}
                 onCharsetChange={setCharset}
+                onStructureChange={setStructure}
               />
             </>
           )}
