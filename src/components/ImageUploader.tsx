@@ -66,7 +66,7 @@ export default function ImageUploader({ onImageReady }: Props) {
         onClick={handleClick}
         className={`
           flex flex-col items-center justify-center gap-4
-          h-64
+          h-64 lg:h-[60vh]
           border-2 border-dashed rounded-lg
           cursor-pointer transition-colors
           ${isDragging

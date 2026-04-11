@@ -75,9 +75,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center gap-8 p-8">
-      <div className="flex items-center gap-3">
-        <Terminal className="w-8 h-8 text-[#00ff41]" />
-        <h1 className="text-2xl font-mono text-[#00ff41]">ASCII CONVERTER</h1>
+      <div className="flex flex-col items-center gap-3">
+        <div className="flex items-center gap-3">
+          <Terminal className="w-8 h-8 text-[#00ff41]" />
+          <h1 className="text-2xl font-mono text-[#00ff41]">ASCII CONVERTER</h1>
+        </div>
+        <p className="text-sm font-mono text-[#00ff41]">Convert images to ASCII art in your browser</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 w-full max-w-7xl">
@@ -92,7 +95,7 @@ export default function Home() {
                 width={400}
                 height={300}
                 unoptimized
-                className="max-w-full max-h-96 object-contain rounded border border-[#00ff41]"
+                className="max-w-full max-h-[400px] lg:max-h-[75vh] object-contain rounded border border-[#00ff41]"
               />
               <button
                 onClick={handleReset}
@@ -114,7 +117,7 @@ export default function Home() {
           {converting ? (
             <p className="font-mono text-[#00ff41] animate-pulse">Converting...</p>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center gap-4 w-full h-64 border-2 border-dashed border-red-500/50 rounded-lg">
+            <div className="flex flex-col items-center justify-center gap-4 w-full h-[50vh] lg:h-[75vh] min-h-[400px] border-2 border-dashed border-red-500/50 rounded-lg">
               <AlertCircle className="w-12 h-12 text-red-500" />
               <p className="font-mono text-sm text-red-500">{error}</p>
               <button
@@ -127,7 +130,7 @@ export default function Home() {
           ) : ascii ? (
             <AsciiPreview ascii={ascii} onDownload={handleDownload} />
           ) : (
-            <div className="flex flex-col items-center justify-center gap-4 w-full h-64 border-2 border-dashed border-[#00ff41]/30 rounded-lg">
+            <div className="flex flex-col items-center justify-center gap-4 w-full h-[50vh] lg:h-[75vh] min-h-[400px] border-2 border-dashed border-[#00ff41]/30 rounded-lg">
               <ScanLine className="w-12 h-12 text-[#00ff41]/30" />
               <p className="font-mono text-sm text-[#00ff41]/50">
                 Upload an image to see ASCII art
@@ -136,6 +139,7 @@ export default function Home() {
           )}
         </div>
       </div>
+      <p className="text-xs font-mono text-[#00ff41]">It&apos;s free, it&apos;s safe, it&apos;s cool</p>
     </div>
   );
 }
