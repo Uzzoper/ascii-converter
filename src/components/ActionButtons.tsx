@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, Maximize2 } from "lucide-react";
 import CopyToast from "./CopyToast";
 
 interface Props {
   ascii: string;
   onDownload: () => void;
+  onFullscreen: () => void;
 }
 
-export default function ActionButtons({ ascii, onDownload }: Props) {
+export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props) {
   const [isCopied, setIsCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   
@@ -72,6 +73,13 @@ export default function ActionButtons({ ascii, onDownload }: Props) {
         >
           <Download className="w-4 h-4" />
           Download .txt
+        </button>
+        <button
+          onClick={onFullscreen}
+          className="flex items-center gap-2 px-4 py-2 border border-[#00ff41] rounded-lg text-[#00ff41] font-mono text-sm hover:bg-[#ffb000] hover:border-[#ffb000] hover:text-[#0a0a0a] transition-colors"
+        >
+          <Maximize2 className="w-4 h-4" />
+          Fullscreen
         </button>
       </div>
       <CopyToast show={isCopied} />
