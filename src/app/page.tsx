@@ -1,79 +1,28 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
 import { Terminal, ScanLine, AlertCircle } from "lucide-react";
 import Image from "next/image";
 import ImageUploader from "@/components/ImageUploader";
 import AsciiPreview from "@/components/AsciiPreview";
 import ConversionControls from "@/components/ConversionControls";
-import { imageToAscii, CHARSETS } from "@/utils/imageToAscii";
-
-const DEBOUNCE_MS = 300;
+import { useAsciiConverter } from "@/hooks/useAsciiConverter";
 
 export default function Home() {
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [ascii, setAscii] = useState<string>("");
-  const [converting, setConverting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [maxWidth, setMaxWidth] = useState(120);
-  const [charset, setCharset] = useState("Classic");
-  const [structure, setStructure] = useState(false);
-
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const convert = useCallback(async (src: string, width: number, cs: string, struct: boolean) => {
-    setConverting(true);
-    setAscii("");
-    setError(null);
-
-    try {
-      const result = await imageToAscii(src, {
-        maxWidth: width,
-        charset: CHARSETS[cs],
-        structure: struct,
-      });
-      setAscii(result);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Conversion failed");
-    } finally {
-      setConverting(false);
-    }
-  }, []);
-
-  const handleImageReady = useCallback((dataUrl: string) => {
-    setImageSrc(dataUrl);
-    convert(dataUrl, maxWidth, charset, structure);
-  }, [convert, maxWidth, charset, structure]);
-
-  useEffect(() => {
-    if (!imageSrc) return;
-
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
-    debounceRef.current = setTimeout(() => {
-      convert(imageSrc, maxWidth, charset, structure);
-    }, DEBOUNCE_MS);
-
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [maxWidth, charset, imageSrc, structure, convert]);
-
-  const handleDownload = useCallback(() => {
-    const blob = new Blob([ascii], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "ascii-art.txt";
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [ascii]);
-
-  const handleReset = useCallback(() => {
-    setImageSrc(null);
-    setAscii("");
-    setError(null);
-  }, []);
+  const {
+    imageSrc,
+    ascii,
+    converting,
+    error,
+    maxWidth,
+    charset,
+    structure,
+    setMaxWidth,
+    setCharset,
+    setStructure,
+    handleImageReady,
+    handleDownload,
+    handleReset,
+  } = useAsciiConverter();
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center gap-8 p-8">
