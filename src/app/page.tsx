@@ -16,9 +16,11 @@ export default function Home() {
     maxWidth,
     charset,
     structure,
+    fontSize,
     setMaxWidth,
     setCharset,
     setStructure,
+    setFontSize,
     handleImageReady,
     handleDownload,
     handleExportPng,
@@ -59,9 +61,11 @@ export default function Home() {
                 maxWidth={maxWidth}
                 charset={charset}
                 structure={structure}
+                fontSize={fontSize}
                 onMaxWidthChange={setMaxWidth}
                 onCharsetChange={setCharset}
                 onStructureChange={setStructure}
+                onFontSizeChange={setFontSize}
               />
             </>
           )}
@@ -82,7 +86,7 @@ export default function Home() {
               </button>
             </div>
           ) : ascii ? (
-            <AsciiPreview ascii={ascii} onDownload={handleDownload} onExportPng={handleExportPng} />
+            <AsciiPreview ascii={ascii} onDownload={handleDownload} onExportPng={handleExportPng} fontSize={fontSize} />
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 w-full container-height border-2 border-dashed border-border-subtle rounded-lg">
               <ScanLine className="w-12 h-12 text-foreground-subtle" />

@@ -6,18 +6,22 @@ interface Props {
   maxWidth: number;
   charset: string;
   structure: boolean;
+  fontSize: number;
   onMaxWidthChange: (value: number) => void;
   onCharsetChange: (value: string) => void;
   onStructureChange: (value: boolean) => void;
+  onFontSizeChange: (value: number) => void;
 }
 
 export default function ConversionControls({
   maxWidth,
   charset,
   structure,
+  fontSize,
   onMaxWidthChange,
   onCharsetChange,
   onStructureChange,
+  onFontSizeChange,
 }: Props) {
   return (
     <div className="flex flex-col w-full gap-4 p-4 border border-border-subtle rounded-lg bg-surface">
@@ -31,6 +35,20 @@ export default function ConversionControls({
           max={200}
           value={maxWidth}
           onChange={(e) => onMaxWidthChange(Number(e.target.value))}
+          className="w-full accent-foreground"
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-mono text-sm text-foreground">
+          Font Size: {fontSize}px
+        </label>
+        <input
+          type="range"
+          min={6}
+          max={24}
+          value={fontSize}
+          onChange={(e) => onFontSizeChange(Number(e.target.value))}
           className="w-full accent-foreground"
         />
       </div>

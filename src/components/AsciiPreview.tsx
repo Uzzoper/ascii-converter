@@ -7,16 +7,18 @@ interface Props {
   ascii: string;
   onDownload: () => void;
   onExportPng: () => void;
+  fontSize: number;
 }
 
-export default function AsciiPreview({ ascii, onDownload, onExportPng }: Props) {
+export default function AsciiPreview({ ascii, onDownload, onExportPng, fontSize }: Props) {
   const { open, FullscreenOverlay } = useFullscreen();
 
   return (
     <>
       <div className="flex flex-col w-full gap-4">
         <pre
-          className="w-full max-w-full overflow-auto p-4 bg-surface border border-foreground rounded-lg text-foreground font-mono container-height content-max-height text-ascii"
+          style={{ fontSize: `${fontSize}px`, lineHeight: 1 }}
+          className="w-full max-w-full overflow-auto p-4 bg-surface border border-foreground rounded-lg text-foreground font-mono container-height content-max-height"
         >
           {ascii}
         </pre>
@@ -30,7 +32,8 @@ export default function AsciiPreview({ ascii, onDownload, onExportPng }: Props) 
 
       <FullscreenOverlay>
         <pre
-          className="overflow-auto p-8 text-foreground font-mono max-w-[95vw] content-fullscreen-height animate-[fadeIn_0.2s_ease-out] text-ascii"
+          style={{ fontSize: `${fontSize}px`, lineHeight: 1 }}
+          className="overflow-auto p-8 text-foreground font-mono max-w-[95vw] content-fullscreen-height animate-[fadeIn_0.2s_ease-out]"
         >
           {ascii}
         </pre>

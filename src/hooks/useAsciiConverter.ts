@@ -12,6 +12,7 @@ export function useAsciiConverter() {
   const [maxWidth, setMaxWidth] = useState(120);
   const [charset, setCharset] = useState("Classic");
   const [structure, setStructure] = useState(false);
+  const [fontSize, setFontSize] = useState(10);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -90,9 +91,11 @@ export function useAsciiConverter() {
     maxWidth,
     charset,
     structure,
+    fontSize,
     setMaxWidth,
     setCharset,
     setStructure,
+    setFontSize,
     handleImageReady,
     handleDownload,
     handleExportPng,

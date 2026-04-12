@@ -96,7 +96,3 @@ body {
 @utility content-fullscreen-height {
   @apply max-h-[95vh];
 }
-
-@utility text-ascii {
-  @apply text-[10px] leading-none;
-}
