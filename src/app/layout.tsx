@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -59,6 +60,7 @@ export default function RootLayout({
             This application requires JavaScript to run. Please enable JavaScript in your browser settings.
           </p>
         </noscript>
+        <Analytics />
       </body>
     </html>
   );
