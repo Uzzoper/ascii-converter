@@ -21,6 +21,7 @@ export default function Home() {
     setStructure,
     handleImageReady,
     handleDownload,
+    handleExportPng,
     handleReset,
   } = useAsciiConverter();
 
@@ -81,7 +82,7 @@ export default function Home() {
               </button>
             </div>
           ) : ascii ? (
-            <AsciiPreview ascii={ascii} onDownload={handleDownload} />
+            <AsciiPreview ascii={ascii} onDownload={handleDownload} onExportPng={handleExportPng} />
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 w-full container-height border-2 border-dashed border-border-subtle rounded-lg">
               <ScanLine className="w-12 h-12 text-foreground-subtle" />

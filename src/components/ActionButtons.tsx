@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Copy, Download, Maximize2 } from "lucide-react";
+import { Copy, Download, Maximize2, Image } from "lucide-react";
 import CopyToast from "./CopyToast";
 
 interface Props {
   ascii: string;
   onDownload: () => void;
+  onExportPng: () => void;
   onFullscreen: () => void;
 }
 
-export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props) {
+export default function ActionButtons({ ascii, onDownload, onExportPng, onFullscreen }: Props) {
   const [isCopied, setIsCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   
@@ -73,6 +74,15 @@ export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props
         >
           <Download className="w-4 h-4" />
           Download .txt
+        </button>
+        <button
+          onClick={onExportPng}
+          className="flex items-center gap-2 btn-primary"
+          aria-label="Export PNG"
+        >
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <Image className="w-4 h-4" />
+          Export PNG
         </button>
         <button
           onClick={onFullscreen}

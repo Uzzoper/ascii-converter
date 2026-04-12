@@ -6,9 +6,10 @@ import ActionButtons from "./ActionButtons";
 interface Props {
   ascii: string;
   onDownload: () => void;
+  onExportPng: () => void;
 }
 
-export default function AsciiPreview({ ascii, onDownload }: Props) {
+export default function AsciiPreview({ ascii, onDownload, onExportPng }: Props) {
   const { open, FullscreenOverlay } = useFullscreen();
 
   return (
@@ -22,6 +23,7 @@ export default function AsciiPreview({ ascii, onDownload }: Props) {
         <ActionButtons
           ascii={ascii}
           onDownload={onDownload}
+          onExportPng={onExportPng}
           onFullscreen={open}
         />
       </div>

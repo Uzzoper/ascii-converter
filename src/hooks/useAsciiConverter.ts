@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { imageToAscii, CHARSETS } from "@/utils/imageToAscii";
+import { asciiToPng } from "@/utils/asciiToPng";
 
 const DEBOUNCE_MS = 300;
 
@@ -61,6 +62,20 @@ export function useAsciiConverter() {
     URL.revokeObjectURL(url);
   }, [ascii]);
 
+  const handleExportPng = useCallback(async () => {
+    try {
+      const blob = await asciiToPng(ascii);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ascii-art.png";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setError("Failed to export PNG");
+    }
+  }, [ascii]);
+
   const handleReset = useCallback(() => {
     setImageSrc(null);
     setAscii("");
@@ -80,6 +95,7 @@ export function useAsciiConverter() {
     setStructure,
     handleImageReady,
     handleDownload,
+    handleExportPng,
     handleReset,
   };
 }
