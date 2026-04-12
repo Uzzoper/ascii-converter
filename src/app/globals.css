@@ -1,9 +1,37 @@
 @import "tailwindcss";
 
 @theme inline {
+  /* Core colors */
   --color-background: #0a0a0a;
   --color-foreground: #00ff41;
   --color-accent: #ffb000;
+  
+  /* Surface colors for cards/containers */
+  --color-surface: #111111;
+  --color-surface-hover: #1a1a1a;
+  
+  /* Opacity variants */
+  --color-foreground-muted: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+  --color-foreground-subtle: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 20%, transparent);
+  
+  /* Border colors */
+  --color-border: var(--color-foreground);
+  --color-border-subtle: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+  
+  /* Error states */
+  --color-error: #ef4444;
+  --color-error-border: color-mix(in srgb, var(--color-error) 50%, transparent);
+  
+  /* Scrollbar colors */
+  --color-scrollbar-track: #111111;
+  --color-scrollbar-thumb: #1a3a1a;
+  --color-scrollbar-thumb-hover: #00ff41;
+  
+  /* Font sizes */
+  --font-size-ascii: 10px;
+  
+  /* Fonts */
   --font-mono: var(--font-geist-mono);
 }
 body {
@@ -18,20 +46,20 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #111;
+  background: var(--color-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a3a1a;
+  background: var(--color-scrollbar-thumb);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00ff41;
+  background: var(--color-scrollbar-thumb-hover);
 }
 
 ::-webkit-scrollbar-corner {
-  background: #111;
+  background: var(--color-scrollbar-track);
 }
 
 @keyframes fadeIn {
@@ -43,4 +71,32 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@utility btn-primary {
+  @apply px-4 py-2 border border-foreground rounded-lg text-foreground font-mono text-sm hover:bg-accent hover:border-accent hover:text-background transition-colors;
+}
+
+@utility btn-toggle-active {
+  @apply border-foreground bg-foreground/20 text-foreground;
+}
+
+@utility btn-toggle-inactive {
+  @apply border-foreground/30 text-foreground/50 hover:border-accent hover:text-accent;
+}
+
+@utility container-height {
+  @apply h-[50vh] lg:h-[75vh] min-h-[400px];
+}
+
+@utility content-max-height {
+  @apply max-h-[85vh];
+}
+
+@utility content-fullscreen-height {
+  @apply max-h-[95vh];
+}
+
+@utility text-ascii {
+  @apply text-[10px] leading-none;
 }

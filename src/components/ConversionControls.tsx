@@ -20,9 +20,9 @@ export default function ConversionControls({
   onStructureChange,
 }: Props) {
   return (
-    <div className="flex flex-col w-full gap-4 p-4 border border-[#00ff41]/30 rounded-lg bg-[#111]">
+    <div className="flex flex-col w-full gap-4 p-4 border border-border-subtle rounded-lg bg-surface">
       <div className="flex flex-col gap-2">
-        <label className="font-mono text-sm text-[#00ff41]">
+        <label className="font-mono text-sm text-foreground">
           Resolution: {maxWidth} chars
         </label>
         <input
@@ -31,12 +31,12 @@ export default function ConversionControls({
           max={200}
           value={maxWidth}
           onChange={(e) => onMaxWidthChange(Number(e.target.value))}
-          className="w-full accent-[#00ff41]"
+          className="w-full accent-foreground"
         />
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-mono text-sm text-[#00ff41]">Charset</label>
+        <label className="font-mono text-sm text-foreground">Charset</label>
         <div className="grid grid-cols-2 lg:flex gap-2">
           {Object.keys(CHARSETS).map((name) => (
             <button
@@ -45,8 +45,8 @@ export default function ConversionControls({
               className={`
                 lg:flex-1 px-3 py-1.5 border rounded font-mono text-xs transition-colors
                 ${charset === name
-                  ? "border-[#00ff41] bg-[#00ff41]/20 text-[#00ff41]"
-                  : "border-[#00ff41]/30 text-[#00ff41]/50 hover:border-[#ffb000] hover:text-[#ffb000]"
+                  ? "btn-toggle-active"
+                  : "btn-toggle-inactive"
                 }
               `}
             >
@@ -58,7 +58,7 @@ export default function ConversionControls({
 
       {charset === "Detailed" && (
         <div className="flex flex-col gap-2">
-          <label className="font-mono text-sm text-[#00ff41]">
+          <label className="font-mono text-sm text-foreground">
             Structure Mode
           </label>
           <button
@@ -66,8 +66,8 @@ export default function ConversionControls({
             className={`
               px-3 py-1.5 border rounded font-mono text-xs transition-colors
               ${structure
-                ? "border-[#00ff41] bg-[#00ff41]/20 text-[#00ff41]"
-                : "border-[#00ff41]/30 text-[#00ff41]/50 hover:border-[#ffb000] hover:text-[#ffb000]"
+                ? "btn-toggle-active"
+                : "btn-toggle-inactive"
               }
             `}
           >

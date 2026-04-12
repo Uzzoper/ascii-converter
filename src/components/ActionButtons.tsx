@@ -29,7 +29,7 @@ export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props
   }, []);
 
   const handleCopy = useCallback(async () => {
-    const htmlContent = `<pre style="font-family: monospace; white-space: pre;">${ascii}</pre>`;
+    const htmlContent = `<pre style="font-family: monospace; white-space: pre; color: var(--color-foreground); background: var(--color-background);">${ascii}</pre>`;
     
     try {
       await navigator.clipboard.write([
@@ -57,11 +57,11 @@ export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props
     <div className="flex flex-col items-center lg:items-end gap-2">
       <div className="flex flex-wrap justify-center lg:justify-end gap-2">
         {copyError ? (
-          <p className="text-red-500 text-sm font-mono">Browser not supported. Use Download instead.</p>
+          <p className="text-error text-sm font-mono">Browser not supported. Use Download instead.</p>
         ) : (
           <button
             onClick={handleCopy}
-            className="flex items-center gap-2 px-4 py-2 border border-[#00ff41] rounded-lg text-[#00ff41] font-mono text-sm hover:bg-[#ffb000] hover:border-[#ffb000] hover:text-[#0a0a0a] transition-colors"
+            className="flex items-center gap-2 btn-primary"
           >
             <Copy className="w-4 h-4" />
             {isCopied ? "Copied!" : "Copy"}
@@ -69,14 +69,14 @@ export default function ActionButtons({ ascii, onDownload, onFullscreen }: Props
         )}
         <button
           onClick={onDownload}
-          className="flex items-center gap-2 px-4 py-2 border border-[#00ff41] rounded-lg text-[#00ff41] font-mono text-sm hover:bg-[#ffb000] hover:border-[#ffb000] hover:text-[#0a0a0a] transition-colors"
+          className="flex items-center gap-2 btn-primary"
         >
           <Download className="w-4 h-4" />
           Download .txt
         </button>
         <button
           onClick={onFullscreen}
-          className="flex items-center gap-2 px-4 py-2 border border-[#00ff41] rounded-lg text-[#00ff41] font-mono text-sm hover:bg-[#ffb000] hover:border-[#ffb000] hover:text-[#0a0a0a] transition-colors"
+          className="flex items-center gap-2 btn-primary"
         >
           <Maximize2 className="w-4 h-4" />
           Fullscreen

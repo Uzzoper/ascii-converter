@@ -66,17 +66,17 @@ export default function ImageUploader({ onImageReady }: Props) {
         onClick={handleClick}
         className={`
           flex flex-col items-center justify-center gap-4
-          h-[50vh] lg:h-[75vh] min-h-[400px]
+          container-height
           border-2 border-dashed rounded-lg
           cursor-pointer transition-colors
           ${isDragging
-            ? "border-[#ffb000] bg-[#ffb000]/10"
-            : "border-[#00ff41] hover:border-[#ffb000]"
+            ? "border-accent bg-accent/10"
+            : "border-foreground hover:border-accent"
           }
         `}
       >
-        <Upload className="w-12 h-12 text-[#00ff41]" />
-        <div className="text-center font-mono text-sm text-[#00ff41]">
+        <Upload className="w-12 h-12 text-foreground" />
+        <div className="text-center font-mono text-sm text-foreground">
           <p>Drag & drop an image or click to upload</p>
         </div>
         <input
@@ -88,12 +88,12 @@ export default function ImageUploader({ onImageReady }: Props) {
         />
       </div>
       {error && (
-        <div className="flex items-center justify-between gap-2 px-4 py-3 border-2 border-dashed border-red-500 rounded-lg bg-red-500/10">
+        <div className="flex items-center justify-between gap-2 px-4 py-3 border-2 border-dashed border-error/50 rounded-lg bg-error/10">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-500" />
-            <span className="font-mono text-sm text-red-500">{error}</span>
+            <AlertCircle className="w-4 h-4 text-error" />
+            <span className="font-mono text-sm text-error">{error}</span>
           </div>
-          <button onClick={clearError} className="text-red-500 hover:text-red-400">
+          <button onClick={clearError} className="text-error hover:text-error/80">
             <X className="w-4 h-4" />
           </button>
         </div>
