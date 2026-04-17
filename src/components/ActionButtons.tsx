@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Copy, Download, Maximize2, Image } from "lucide-react";
 import CopyToast from "./CopyToast";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface Props {
   ascii: string;
@@ -14,6 +15,7 @@ interface Props {
 export default function ActionButtons({ ascii, onDownload, onExportPng, onFullscreen }: Props) {
   const [isCopied, setIsCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
+  const { t } = useI18n();
   
   const copiedTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const errorTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -58,14 +60,14 @@ export default function ActionButtons({ ascii, onDownload, onExportPng, onFullsc
     <div className="flex flex-col items-center lg:items-end gap-2">
       <div className="flex flex-wrap justify-center lg:justify-end gap-2">
         {copyError ? (
-          <p className="text-error text-sm font-mono">Browser not supported. Use Download instead.</p>
+          <p className="text-error text-sm font-mono">{t("upload.error.browser")}</p>
         ) : (
           <button
             onClick={handleCopy}
             className="flex items-center gap-2 btn-primary"
           >
             <Copy className="w-4 h-4" />
-            {isCopied ? "Copied!" : "Copy"}
+            {isCopied ? t("actions.copied") : t("actions.copy")}
           </button>
         )}
         <button
@@ -73,23 +75,23 @@ export default function ActionButtons({ ascii, onDownload, onExportPng, onFullsc
           className="flex items-center gap-2 btn-primary"
         >
           <Download className="w-4 h-4" />
-          Download .txt
+          {t("actions.download_txt")}
         </button>
         <button
           onClick={onExportPng}
           className="flex items-center gap-2 btn-primary"
-          aria-label="Export PNG"
+          aria-label={t("actions.export_png")}
         >
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image className="w-4 h-4" />
-          Export PNG
+          {t("actions.export_png")}
         </button>
         <button
           onClick={onFullscreen}
           className="flex items-center gap-2 btn-primary"
         >
           <Maximize2 className="w-4 h-4" />
-          Fullscreen
+          {t("actions.fullscreen")}
         </button>
       </div>
       <CopyToast show={isCopied} />

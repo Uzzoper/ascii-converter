@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { imageToAscii, CHARSETS } from "@/utils/imageToAscii";
 import { asciiToPng } from "@/utils/asciiToPng";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const DEBOUNCE_MS = 300;
 
 export function useAsciiConverter() {
+  const { t } = useI18n();
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [ascii, setAscii] = useState<string>("");
   const [converting, setConverting] = useState(false);
@@ -73,9 +75,9 @@ export function useAsciiConverter() {
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      setError("Failed to export PNG");
+      setError(t("state.failed"));
     }
-  }, [ascii]);
+  }, [ascii, t]);
 
   const handleReset = useCallback(() => {
     setImageSrc(null);

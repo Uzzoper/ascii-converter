@@ -1,6 +1,7 @@
 "use client";
 
 import { CHARSETS } from "@/utils/imageToAscii";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface Props {
   maxWidth: number;
@@ -23,11 +24,13 @@ export default function ConversionControls({
   onStructureChange,
   onFontSizeChange,
 }: Props) {
+  const { t } = useI18n();
+
   return (
     <div className="flex flex-col w-full gap-4 p-4 border border-border-subtle rounded-lg bg-surface">
       <div className="flex flex-col gap-2">
         <label className="font-mono text-sm text-foreground">
-          Resolution: {maxWidth} chars
+          {t("controls.resolution", { n: maxWidth })}
         </label>
         <input
           type="range"
@@ -41,7 +44,7 @@ export default function ConversionControls({
 
       <div className="flex flex-col gap-2">
         <label className="font-mono text-sm text-foreground">
-          Font Size: {fontSize}px
+          {t("controls.fontSize", { n: fontSize })}
         </label>
         <input
           type="range"
@@ -54,7 +57,7 @@ export default function ConversionControls({
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="font-mono text-sm text-foreground">Charset</label>
+        <label className="font-mono text-sm text-foreground">{t("controls.charset")}</label>
         <div className="grid grid-cols-2 lg:flex gap-2">
           {Object.keys(CHARSETS).map((name) => (
             <button
@@ -77,7 +80,7 @@ export default function ConversionControls({
       {charset === "Detailed" && (
         <div className="flex flex-col gap-2">
           <label className="font-mono text-sm text-foreground">
-            Structure Mode
+            {t("controls.structure")}
           </label>
           <button
             onClick={() => onStructureChange(!structure)}
@@ -89,7 +92,7 @@ export default function ConversionControls({
               }
             `}
           >
-            {structure ? "ON" : "OFF"}
+            {structure ? t("controls.structure_on") : t("controls.structure_off")}
           </button>
         </div>
       )}

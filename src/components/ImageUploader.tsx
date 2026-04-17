@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from "react";
 import { Upload, AlertCircle, X } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 interface Props {
   onImageReady: (dataUrl: string) => void;
@@ -11,6 +12,7 @@ export default function ImageUploader({ onImageReady }: Props) {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { t } = useI18n();
 
   const clearError = useCallback(() => setError(null), []);
 
@@ -18,7 +20,7 @@ export default function ImageUploader({ onImageReady }: Props) {
     clearError();
     
     if (!file.type.startsWith("image/")) {
-      setError("Please select an image file (PNG, JPG, GIF, etc.)");
+      setError(t("upload.error.invalid"));
       return;
     }
 
@@ -28,7 +30,7 @@ export default function ImageUploader({ onImageReady }: Props) {
       onImageReady(dataUrl);
     };
     reader.readAsDataURL(file);
-  }, [onImageReady, clearError]);
+  }, [onImageReady, clearError, t]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -77,7 +79,7 @@ export default function ImageUploader({ onImageReady }: Props) {
       >
         <Upload className="w-12 h-12 text-foreground" />
         <div className="text-center font-mono text-sm text-foreground">
-          <p>Drag & drop an image or click to upload</p>
+          <p>{t("upload.dropzone")}</p>
         </div>
         <input
           ref={inputRef}

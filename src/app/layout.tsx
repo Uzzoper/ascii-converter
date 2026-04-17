@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { I18nProvider } from "@/i18n/I18nProvider";
 import "./globals.css";
 
 const geistMono = Geist_Mono({
@@ -54,13 +55,15 @@ export default function RootLayout({
       className={`${geistMono.variable} antialiased`}
     >
       <body className="min-h-screen font-mono">
-        {children}
-        <noscript>
-          <p style={{ textAlign: "center", padding: "2rem", fontFamily: "monospace", color: "#00ff41", background: "#0a0a0a" }}>
-            This application requires JavaScript to run. Please enable JavaScript in your browser settings.
-          </p>
-        </noscript>
-        <Analytics />
+        <I18nProvider>
+          {children}
+          <noscript>
+            <p style={{ textAlign: "center", padding: "2rem", fontFamily: "monospace", color: "#00ff41", background: "#0a0a0a" }}>
+              This application requires JavaScript to run. Please enable JavaScript in your browser settings.
+            </p>
+          </noscript>
+          <Analytics />
+        </I18nProvider>
       </body>
     </html>
   );
