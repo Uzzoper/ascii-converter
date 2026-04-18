@@ -35,6 +35,7 @@ export function useI18n() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLocaleState(detectLocale());
     setMounted(true);
   }, []);
