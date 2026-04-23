@@ -63,11 +63,11 @@ function structureChar(
 
   if (magnitude < MAG_THRESHOLD) {
     const idx = Math.floor(normalizedLuma * (flatCharset.length - 1));
-    return flatCharset[idx];
+    return flatCharset[idx] ?? ' ';
   }
   if (magnitude > DENSE_THRESHOLD) {
     const idx = Math.floor(normalizedLuma * (STRUCT_DENSE.length - 1));
-    return STRUCT_DENSE[idx];
+    return STRUCT_DENSE[idx] ?? ' ';
   }
   const absGx = Math.abs(gx);
   const absGy = Math.abs(gy);
@@ -93,7 +93,7 @@ function structureChar(
     }
   }
 
-  return charset[Math.floor(normalizedLuma * (charset.length - 1))];
+  return charset[Math.floor(normalizedLuma * (charset.length - 1))] ?? ' ';
 }
 
 export async function imageToAscii(
@@ -211,7 +211,7 @@ export async function imageToAsciiFrame(
         );
       } else {
         const charIndex = Math.floor(normalized * (charset.length - 1));
-        char = charset[charIndex];
+        char = charset[charIndex] ?? ' ';
       }
 
       const r = pixels[offset];
