@@ -1,5 +1,6 @@
 "use client";
 
+import { AsciiColorMode } from "@/utils/asciiFrame";
 import { CHARSETS } from "@/utils/imageToAscii";
 import { useI18n } from "@/i18n/I18nProvider";
 
@@ -7,10 +8,12 @@ interface Props {
   maxWidth: number;
   charset: string;
   structure: boolean;
+  colorMode: AsciiColorMode;
   fontSize: number;
   onMaxWidthChange: (value: number) => void;
   onCharsetChange: (value: string) => void;
   onStructureChange: (value: boolean) => void;
+  onColorModeChange: (value: AsciiColorMode) => void;
   onFontSizeChange: (value: number) => void;
 }
 
@@ -18,10 +21,12 @@ export default function ConversionControls({
   maxWidth,
   charset,
   structure,
+  colorMode,
   fontSize,
   onMaxWidthChange,
   onCharsetChange,
   onStructureChange,
+  onColorModeChange,
   onFontSizeChange,
 }: Props) {
   const { t } = useI18n();
@@ -72,6 +77,27 @@ export default function ConversionControls({
               `}
             >
               {name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="font-mono text-sm text-foreground">{t("controls.colorMode")}</label>
+        <div className="grid grid-cols-2 gap-2">
+          {(["mono", "color"] as AsciiColorMode[]).map((mode) => (
+            <button
+              key={mode}
+              onClick={() => onColorModeChange(mode)}
+              className={`
+                px-3 py-1.5 border rounded font-mono text-xs transition-colors
+                ${colorMode === mode
+                  ? "btn-toggle-active"
+                  : "btn-toggle-inactive"
+                }
+              `}
+            >
+              {t(`controls.colorMode_${mode}`)}
             </button>
           ))}
         </div>

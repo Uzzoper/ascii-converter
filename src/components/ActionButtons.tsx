@@ -4,15 +4,18 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Copy, Download, Maximize2, Image } from "lucide-react";
 import CopyToast from "./CopyToast";
 import { useI18n } from "@/i18n/I18nProvider";
+import { AsciiFrame, asciiFrameToHtml, escapeHtml } from "@/utils/asciiFrame";
 
 interface Props {
+  asciiFrame: AsciiFrame;
   ascii: string;
   onDownload: () => void;
   onExportPng: () => void;
   onFullscreen: () => void;
 }
 
-export default function ActionButtons({ ascii, onDownload, onExportPng, onFullscreen }: Props) {
+
+export default function ActionButtons({ asciiFrame, ascii, onDownload, onExportPng, onFullscreen }: Props) {
   const [isCopied, setIsCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
   const { t } = useI18n();
@@ -32,7 +35,9 @@ export default function ActionButtons({ ascii, onDownload, onExportPng, onFullsc
   }, []);
 
   const handleCopy = useCallback(async () => {
-    const htmlContent = `<pre style="font-family: monospace; white-space: pre; color: var(--color-foreground); background: var(--color-background);">${ascii}</pre>`;
+    const htmlContent = asciiFrame
+      ? asciiFrameToHtml(asciiFrame)
+      : `<pre style="font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace; white-space: pre; color: #00ff41; background: #0a0a0a; padding: 1rem; border-radius: 0.5rem; line-height: 1;">${escapeHtml(ascii)}</pre>`;
     
     try {
       await navigator.clipboard.write([
@@ -54,7 +59,7 @@ export default function ActionButtons({ ascii, onDownload, onExportPng, onFullsc
       }
       errorTimeoutRef.current = setTimeout(() => setCopyError(false), 3000);
     }
-  }, [ascii]);
+  }, [asciiFrame, ascii]);
 
   return (
     <div className="flex flex-col items-center lg:items-end gap-2">

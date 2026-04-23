@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { imageToAscii, CHARSETS, CHAR_ASPECT_RATIO } from './imageToAscii';
+import { imageToAscii, imageToAsciiFrame, CHARSETS, CHAR_ASPECT_RATIO } from './imageToAscii';
+import { asciiFrameToText } from './asciiFrame';
 
 const createMockContext = () => ({
   drawImage: vi.fn(),
@@ -143,6 +144,36 @@ describe('imageToAscii', () => {
     });
 
     expect(resultClassic).not.toBe(resultBlocks);
+  });
+
+  it('returns per-cell colors in color mode', async () => {
+    const maxWidth = 4;
+    const expectedHeight = Math.floor(maxWidth * (50 / 100) * CHAR_ASPECT_RATIO);
+
+    mockContext.getImageData.mockReturnValue({
+      data: createMockPixelData(maxWidth, expectedHeight, [255, 128, 0, 255]),
+    });
+
+    const frame = await imageToAsciiFrame('valid-image-src', {
+      maxWidth,
+      colorMode: 'color',
+    });
+
+    expect(frame.lines[0][0]?.color).toBe('#ff8000');
+  });
+
+  it('formats structured frames back to plain text', async () => {
+    const maxWidth = 10;
+    const expectedHeight = Math.floor(maxWidth * (50 / 100) * CHAR_ASPECT_RATIO);
+
+    mockContext.getImageData.mockReturnValue({
+      data: createMockPixelData(maxWidth, expectedHeight, [128, 128, 128, 255]),
+    });
+
+    const frame = await imageToAsciiFrame('valid-image-src', { maxWidth, colorMode: 'color' });
+    const text = await imageToAscii('valid-image-src', { maxWidth, colorMode: 'color' });
+
+    expect(asciiFrameToText(frame)).toBe(text);
   });
 
   it('throws on invalid image', async () => {

@@ -1,3 +1,5 @@
+import { AsciiColorMode, AsciiFrame, asciiFrameToText } from "./asciiFrame";
+
 export const CHAR_ASPECT_RATIO = 0.5;
 
 export const CHARSETS: Record<string, string> = {
@@ -19,6 +21,7 @@ export interface AsciiOptions {
   maxWidth?: number;
   charset?: string;
   structure?: boolean;
+  colorMode?: AsciiColorMode;
 }
 
 function computeSobel(
@@ -97,9 +100,29 @@ export async function imageToAscii(
   imageSrc: string,
   options: AsciiOptions = {}
 ): Promise<string> {
+  const frame = await imageToAsciiFrame(imageSrc, options);
+
+  return asciiFrameToText(frame);
+}
+
+function rgbToHex(r: number, g: number, b: number): string {
+  return `#${[r, g, b]
+    .map((value) => value.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function blendOnBlack(channel: number, alpha: number): number {
+  return Math.round(channel * alpha);
+}
+
+export async function imageToAsciiFrame(
+  imageSrc: string,
+  options: AsciiOptions = {}
+): Promise<AsciiFrame> {
   const maxWidth = options.maxWidth ?? 120;
   const charset = options.charset ?? CHARSETS.Classic;
   const structure = options.structure ?? false;
+  const colorMode = options.colorMode ?? "mono";
 
   const img = new Image();
   await new Promise<void>((resolve, reject) => {
@@ -165,12 +188,13 @@ export async function imageToAscii(
     }
   }
 
-  const lines: string[] = [];
+  const lines: AsciiFrame["lines"] = [];
 
   for (let y = 0; y < height; y++) {
-    const lineChars: string[] = [];
+    const lineChars: AsciiFrame["lines"][number] = [];
     for (let x = 0; x < width; x++) {
       const idx = y * width + x;
+      const offset = idx * 4;
       const luma = pixelLumas[idx];
       const normalized = lumaRange === 0 ? 0 : (luma - minLuma) / lumaRange;
 
@@ -190,10 +214,24 @@ export async function imageToAscii(
         char = charset[charIndex];
       }
 
-      lineChars.push(char);
+      const r = pixels[offset];
+      const g = pixels[offset + 1];
+      const b = pixels[offset + 2];
+      const a = pixels[offset + 3] / 255;
+
+      lineChars.push({
+        char,
+        color: colorMode === "color"
+          ? rgbToHex(blendOnBlack(r, a), blendOnBlack(g, a), blendOnBlack(b, a))
+          : undefined,
+      });
     }
-    lines.push(lineChars.join(""));
+    lines.push(lineChars);
   }
 
-  return lines.join("\n");
+  return {
+    width,
+    height,
+    lines,
+  };
 }

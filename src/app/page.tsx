@@ -12,16 +12,19 @@ import { useI18n } from "@/i18n/I18nProvider";
 export default function Home() {
   const {
     imageSrc,
+    asciiFrame,
     ascii,
     converting,
     error,
     maxWidth,
     charset,
     structure,
+    colorMode,
     fontSize,
     setMaxWidth,
     setCharset,
     setStructure,
+    setColorMode,
     setFontSize,
     handleImageReady,
     handleDownload,
@@ -67,10 +70,12 @@ export default function Home() {
                 maxWidth={maxWidth}
                 charset={charset}
                 structure={structure}
+                colorMode={colorMode}
                 fontSize={fontSize}
                 onMaxWidthChange={setMaxWidth}
                 onCharsetChange={setCharset}
                 onStructureChange={setStructure}
+                onColorModeChange={setColorMode}
                 onFontSizeChange={setFontSize}
               />
             </>
@@ -91,8 +96,14 @@ export default function Home() {
                 {t("state.try_again")}
               </button>
             </div>
-          ) : ascii ? (
-            <AsciiPreview ascii={ascii} onDownload={handleDownload} onExportPng={handleExportPng} fontSize={fontSize} />
+          ) : asciiFrame ? (
+            <AsciiPreview
+              asciiFrame={asciiFrame}
+              ascii={ascii}
+              onDownload={handleDownload}
+              onExportPng={handleExportPng}
+              fontSize={fontSize}
+            />
           ) : (
             <div className="flex flex-col items-center justify-center gap-4 w-full container-height border-2 border-dashed border-border-subtle rounded-lg">
               <ScanLine className="w-12 h-12 text-foreground-subtle" />
