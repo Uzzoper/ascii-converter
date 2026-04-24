@@ -16,6 +16,7 @@ Web application that converts images to ASCII art directly in your browser. Free
 - Real-time ASCII conversion with 4 charsets
 - Resolution control (20-200 chars width)
 - Structure mode for edge-aware rendering (Detailed charset)
+- Color Mode toggle (MONO/COLOR) for colored ASCII output
 - Copy to clipboard / Download as .txt / Export as .png
 - Fullscreen ASCII preview
 - Dark hacker aesthetic (terminal style)
@@ -57,7 +58,10 @@ src/
 │       └── es.json               # Spanish translations
 └── utils/
     ├── imageToAscii.ts           # Image to ASCII conversion logic
-    └── asciiToPng.ts             # ASCII to PNG canvas rendering
+    ├── asciiFrame.ts             # ASCII frame types, color runs, HTML export
+    ├── asciiToPng.ts             # ASCII to PNG canvas rendering
+    ├── imageToAscii.test.ts      # Tests for image to ASCII conversion
+    └── asciiFrame.test.ts        # Tests for ASCII frame utilities
 ```
 
 ## Charsets
@@ -66,7 +70,7 @@ src/
 |-----------|-----------------------------------------------|
 | Classic   | ` .,:+=#S%?*@`                               |
 | Blocks    | ` ░▒▓█`                                       |
-| Detailed  | Full ASCII range                              |
+| Detailed  | ` .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$` |
 | Minimal   | ` .:+=#`                                      |
 
 ## Commands
